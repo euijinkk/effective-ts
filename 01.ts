@@ -20,3 +20,16 @@ console.log(names[2].toUpperCase());
 // 타입스크립트를 대하는 자세 - 최소한 자바스크립트 런타임에서의 오류를 잡도록 노력하고, 런타임에서 나타나지 않는 휴먼에러를 방지하자.
 
 // 타입스크립트가 이해하는 값의 타입과 실제 값에 차이가 있기 때문이다. 이를 조정하에 런타임단에서 에러를 잡아주자.
+
+/* Item 2  */
+
+// noImplicitAny Error
+function add(a, b) {
+  return a + b;
+}
+
+// strictNullChecks
+const x: number | null = null;
+
+const assertionX = x!;
+type AssertionX = typeof assertionX;
