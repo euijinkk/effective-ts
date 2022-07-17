@@ -89,3 +89,48 @@ function add2(a: any, b: any) {
 }
 
 add2(3, 4);
+
+/* Item 4 구조적 타이핑에 익숙해지기 */
+
+// 자바스크립트는 본질적으로 덕타이핑 기반입니다.
+// 덕타이핑이란, 객체가 어떤 타입에 부합하는 변수와 메서드를 가질 경우 객체를 해당 타입에 속하는 것으로 간주하는 방식입니다.
+// 만약 어떤 새가 오리처럼 걷고, 헤염치고, 꽤꽥거리는 소리를 낸다면 나는 그 새를 오리라고 부를 것이다.
+// 즉, 런타임에 타입을 체크하는 것
+
+// 자바스크립트는 덕타이핑 (런타임에서), 타입스크립트는 구조적 타이핑
+// 구조적 타이핑은 컴파일 단계에서 타입을 체크한다.
+
+// https://vallista.kr/%EB%8D%95-%ED%83%80%EC%9D%B4%ED%95%91%EA%B3%BC-%EA%B5%AC%EC%A1%B0%EC%A0%81-%ED%83%80%EC%9D%B4%ED%95%91/
+
+interface XY {
+  x: number;
+  y: number;
+}
+
+function addXY(xy: XY) {
+  return xy.x + xy.y;
+}
+
+const xyz = {
+  x: 4,
+  y: 5,
+  z: 6,
+};
+
+// @ISSUE: 왜 하나는 되고 하나는 안되는거야?
+// xyz는 여러곳에서 사용될 변수이니 sub type으로 받아들이는데 (open type)
+// 리터럴의 경우 한곳에만 사용될 것이니 타입이 구조적으로 일치해야만 한다 (sealed type, precise type)
+addXY(xyz); // 통과
+addXY({ x: 3, y: 4, z: 5 }); // 에러
+
+//
+const aaa = Object.keys(xyz);
+type AAA = typeof aaa;
+// Object.keys의 반환값은 무조건 string[]인데, xyz의 key만을 뽑아서 반환하게 할수는 없을까?
+for (const axis of Object.keys(xyz)) {
+  const coord = xyz[axis];
+}
+
+// 구조적 타이핑의 장점
+// 1. 테스트가 용이하다
+// 2. 라이브러리간의 의존성을 완벽히 분리할 수 있다.
