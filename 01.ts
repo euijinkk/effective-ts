@@ -33,3 +33,59 @@ const x: number | null = null;
 
 const assertionX = x!;
 type AssertionX = typeof assertionX;
+
+/* Item 3 */
+
+// 만약 오류가 있을 때 컴파일 하지 않으려면, tsconfig.json에 noEmitOnError를 설정하거나 빌드도구에 동일하게 적용하면 됩니다.
+
+// 런타임시에 타입 정보를 활용하고 싶다면?
+
+// 1. 태그를 활용한다.
+
+interface Square {
+  kind: "square";
+  width: number;
+}
+
+interface Rectangle {
+  kind: "rectangle";
+  height: number;
+  width: number;
+}
+
+type Shape = Square | Rectangle;
+
+function calculateArea(shape: Shape) {
+  if (shape.kind === "rectangle") {
+    return shape.width * shape.height;
+  } else {
+    return shape.width * shape.width;
+  }
+}
+
+// 2. 클래스를 활용한다.
+// 클래스는 값이며 동시에 타입이다.
+
+class Square2 {
+  constructor(public width: number) {}
+}
+class Rectangle2 extends Square2 {
+  constructor(public width: number, public height: number) {
+    super(width);
+  }
+}
+
+// 타입스크립트 타입으로는 함수를 오버로드 하기
+
+// C++ 같은 언어는 동일핞 이름에 매개변수만다 른 여러 버전의 함수를 허용합니다.
+// 이를 함수 오버로딩이라고 합니다.
+// 그러나 타입스크립트에선느 타입고, 런타임의 동작이 무관하기 때문에, 함수 오버로딩이 불가능합니다.
+// 타입스크립트가 함수 오버로딩 기능을 지원하기는 하지만, 온전히 타입 수준에서만 동작합니다.
+// 하나의 함수에 여러 개의 선언문을 작성할 수 있지만, 구현체는 오직 하나 분입니다.
+function add2(a: number, b: number): number;
+function add2(a: string, b: string): string;
+function add2(a: any, b: any) {
+  return a + b;
+}
+
+add2(3, 4);
