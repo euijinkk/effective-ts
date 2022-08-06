@@ -169,17 +169,17 @@ function createWindow(options: Options) {
   return 1;
 }
 
-const var3 = {
-  title: "Sisyphe",
-  darkmode: true,
-};
-
-createWindow(var3);
-
-// createWindow({
+// const var3 = {
 //   title: "Sisyphe",
 //   darkmode: true,
-// });
+// };
+
+// createWindow(var3);
+
+createWindow({
+  title: "Sisyphe",
+  darkmode: true,
+});
 
 // darkmode는 Options에 없습니다.
 // 구조적 타입 시스템은 이것을 허용하는데, 오타의 가능성이 크다.
