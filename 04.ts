@@ -161,3 +161,73 @@ function eulogize(p: Person4) {
     const { dateOfBirth } = p;
   }
 }
+
+/* Item 33 string 타입보다 더 구체적인 타입 사용하기 */
+
+interface Album {
+  artist: string;
+  title: string;
+  releaseDate: string; // YYYY-MM-DD
+  recordingType: string; // live 또는 studio
+}
+
+type RecordingType = "studio" | "live";
+interface Album2 {
+  artist: string;
+  title: string;
+  releaseDate: Date;
+  recordingType: RecordingType;
+}
+
+const albums: Album2[] = [
+  {
+    artist: "1",
+    title: "2",
+    releaseDate: new Date("1999-02-14"),
+    recordingType: "studio",
+  },
+  {
+    artist: "1",
+    title: "2",
+    releaseDate: new Date("1999-02-14"),
+    recordingType: "studio",
+  },
+  {
+    artist: "1",
+    title: "2",
+    releaseDate: new Date("1999-02-14"),
+    recordingType: "studio",
+  },
+];
+
+// _ 라이브러리의 pluck 함수
+function pluck(records, key) {
+  return records.map((r) => r[key]);
+}
+
+function pluck2<T>(records: T[], key: string): any[] {
+  return records.map((r) => r[key]); // r에 key 가 없다.
+}
+
+function pluck3<T>(records: T[], key: keyof T) {
+  return records.map((r) => r[key]);
+}
+
+pluck3(albums, "recordingType"); // (string | Date)[]
+// 너무 넓다.
+
+// 2번째 제네릭을 받자
+
+function pluck4<T, K extends keyof T>(records: T[], key: K) {
+  return records.map((r) => r[key]);
+}
+
+pluck4(albums, "recordingType"); // RecordingType[]
+
+// string은 any와 비슷한 문제를 가지고 있습니다. 따라서 잘못 사용하게 되면 무효한 값을 허용하고 타입간의 관계도 감추어 버립니다.
+// 이러한 문제저은 타입 체커를 방해하고 실제 버그를 찾찌 못하게 만듭니다.
+// string의 부분집합을 정의할 수 있는 기능은 자바스크립트 코드에 타입 안전성을 크게 높입니다.
+// 보다 정확한 타입을 사용하면 오류를 방지하고 코드의 가독성도 향상시킬 수 있습니다.
+
+/* Item 37 공식 명칭에는 상표를 붙이기 */
+type Meters = number & { _brand: "meters" };
